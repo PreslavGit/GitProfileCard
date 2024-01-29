@@ -1,50 +1,42 @@
 import { GithubService } from "./GithubService"
-import { User, Repository } from "./types"
+import { User, Repository, RepositoryLanguages } from "./types"
 
 export class CardComponent {
+    private maxLangsDisplay = 3
+
     constructor(private readonly service: GithubService){}
 
-    public async appendCard(appendTo: Node, username: string) {
+    public async mountCard(appendTo: Node, username: string) {
         const {user, repos} = await this.getCardData(username)
         
         const cardNode = this.createCardNode(user)
         repos.forEach(r => {
-            this.appendRepo(cardNode, r)
+            const repositoryNode = this.stringToHTML(this.getRepositoryHTML(r))            
+            cardNode.appendChild(repositoryNode)
         })
 
         appendTo.appendChild(cardNode)
     }
 
     private createCardNode(user: User){
-        const template = document.createElement('template')
-
-        template.innerHTML = `
+        const cardHTML = `
           <div id="card">
               <img alt="Avatar" id="avatar" src="${user.avatar_url}">
               <a id="username" target="_blank" href="${user.html_url}">${user.login}</a>
-              <div id="repos"></div>
           </div>
         `
 
-        return template.content.firstElementChild as Element
+        return this.stringToHTML(cardHTML)
     }
 
-    private appendRepo(repos: Node, repo: Repository) {
-        const template = document.createElement('template')
-        template.innerHTML = this.getRepoString(repo)
-        
-        repos.appendChild(template.content.firstElementChild as Element)
-    }
-
-    private getRepoString(repo: Repository) {
+    private getRepositoryHTML(repo: Repository) {
         if (repo.languages == null) repo.languages = {}
 
         const languageKeys = Object.keys(repo.languages)
         const langsByteSum = languageKeys.reduce((prev, curr) => {
-            const acc = repo.languages?.[curr] ?? 0
+            const acc = (repo.languages as RepositoryLanguages)[curr]
             return prev + acc
         }, 0)
-        const maxLangsDisplay = 3
 
         return `
         <div class="repo">
@@ -65,12 +57,12 @@ export class CardComponent {
           </div>
           <div class="repoLangs">
             ${languageKeys.map((l, i) => {
-            if (i < maxLangsDisplay) {
-                return `<div class="repoLang">${l} - ${this.displayPercentage(langsByteSum, (repo.languages?.[l] ?? 0))}%</div>`
-            } else if (i === maxLangsDisplay) {
-                return `<div class="repoLangsMore">+ ${languageKeys.length - maxLangsDisplay} more</div>`
-            }
-        }).join('')}
+                if (i < this.maxLangsDisplay) {
+                    return `<div class="repoLang">${l} - ${this.displayPercentage(langsByteSum, (repo.languages as RepositoryLanguages)[l])}%</div>`
+                } else if (i === this.maxLangsDisplay) {
+                    return `<div class="repoLangsMore">+ ${languageKeys.length - this.maxLangsDisplay} more</div>`
+                }
+            }).join('')}
           </div>
         </div>
       `
@@ -78,6 +70,13 @@ export class CardComponent {
 
     private displayPercentage(sum: number, part: number) {
         return (part / sum * 100).toFixed()
+    }
+    
+    private stringToHTML(string: string){
+        const doc = new DOMParser().parseFromString(string, 'text/html')
+        if(!doc.firstChild) throw new Error("Error converting string to HTML")
+
+        return doc.body.firstChild as Node
     }
 
     private async getCardData(username: string) {

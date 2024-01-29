@@ -37,7 +37,7 @@ function showCard(username = '', useMock = true){
   const cardComponent = new CardComponent(service)
 
   try{
-    cardComponent.appendCard(app, username)
+    cardComponent.mountCard(app, username)
   }catch(e){
     alert(e)
   }
