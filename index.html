@@ -7,12 +7,13 @@
   </head>
   <body>
     <div id="app">
-      <div id="card">
-          <img alt="Avatar" id="avatar">
-          <a id="username" target="_blank"></a>
-          <div id="repos"></div>
+      <label for="mockCheckbox">Use mock</label>
+      <input type="checkbox" id="mockCheckbox" checked="true">
+      <div style="text-align: center; display: none;" id="searchContainer">
+        <input type="text" id="userSearch" value="torvalds">
+        <button id="userSearchBtn">Search</button>
       </div>
     </div>
-    <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="/src/main.ts" defer></script>
   </body>
 </html>

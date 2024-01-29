@@ -3,18 +3,6 @@ import { APIErrorMsg, Repository, RepositoryLanguages, User } from "./types"
 export class GithubService {
   private URL = 'https://api.github.com'
   
-  private async fetchRequest<T>(route: string): Promise<T> {
-    const res = await fetch(this.URL + route)
-
-    if (res.status >= 400) {
-      const err = await res.json() as APIErrorMsg
-      throw new Error(err.message)
-    }
-
-    const json = await res.json() as T
-    return json
-  }
-  
   public async getUserByUsername(username: string){
     let user: User | null = null 
     try {
@@ -48,8 +36,19 @@ export class GithubService {
     return langs;
   }
 
+  private async fetchRequest<T>(route: string): Promise<T> {
+    const res = await fetch(this.URL + route)
+
+    if (res.status >= 400) {
+      const err = await res.json() as APIErrorMsg
+      throw new Error(err.message)
+    }
+
+    const json = await res.json() as T
+    return json
+  }
+
   private handleError(err: unknown){
-    // TODO
     alert(err)
   }
 }
