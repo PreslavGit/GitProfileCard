@@ -1,0 +1,68 @@
+:root{
+  padding: 0;
+  margin: 0;
+  background-color: #e7e7e7;
+
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  --primary-color: #49a6fc;
+  --bg-color: #333
+}
+
+#card{
+  background-color: var(--bg-color);
+  width: 350px;
+  margin: auto;
+  margin-top: 10vh;
+  padding: 1em 0.5em;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  color: white;
+  border: solid 2px var(--primary-color);
+  border-radius: 10px;
+}
+
+#avatar{
+  width: 40px;
+  border-radius: 50%;
+}
+
+a{
+  color: var(--primary-color);
+}
+
+#username{
+  font-size: large;
+}
+
+.repo{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 20px 0;
+}
+
+.repoName{
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.repoLangs{
+  display: flex;
+  gap: 5px;
+}
+
+.repoLangsMore{
+  font-size: small;
+}
+
+.repoLang{
+  font-size: x-small;
+  padding: 2px 6px;
+  border-radius: 10px;
+  display: inline;
+  background-color: var(--primary-color);
+  white-space: nowrap;
+}
