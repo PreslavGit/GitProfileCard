@@ -85,10 +85,11 @@ export class CardComponent {
 
         const repos = await this.service.getUserRepos(username)
 
-        for (const repo of repos) {
-            const repoLangs = await this.service.getRepoLanguages(username, repo.name)
-            repo.languages = repoLangs
-        }
+        const langRequests = repos.map(async r => {
+            const repoLangs = await this.service.getRepoLanguages(username, r.name)
+            r.languages = repoLangs
+        }) 
+        await Promise.all(langRequests)
 
         return {user, repos}
     }
