@@ -1,11 +1,21 @@
 :root{
   padding: 0;
   margin: 0;
-  background-color: #e7e7e7;
+  background-color: #eeeeee;
 
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   --primary-color: #49a6fc;
   --bg-color: #333
+}
+
+a{
+  color: var(--primary-color);
+}
+
+input{
+  padding: 7px;
+  border-radius: 5px;
+  border: none;
 }
 
 #app{
@@ -38,10 +48,6 @@
 #avatar{
   width: 40px;
   border-radius: 50%;
-}
-
-a{
-  color: var(--primary-color);
 }
 
 #username{
